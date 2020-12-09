@@ -24,7 +24,7 @@ GPIO.output(DC_MOTOR_PIN, GPIO.LOW)
 # Constants, Times in Seconds
 FOOD_DELAY = 6.80
 MANUAL_FEED_PAUSE = 3600
-DISPLAY_ON_TIME = 60
+DISPLAY_ON_TIME = 300
 BUTTON_TEXT_SIZE = 60
 
 # Color Constants
@@ -102,7 +102,7 @@ def single_feed():
     play(music.crazy_frog_melody, music.crazy_frog_tempo, 0.30, 0.900)
 
     if enabled:
-        last_fed_time.value = current_time.strftime("%I:%M:%S %p")
+        last_fed_time.value = current_time.strftime("%I:%M %p")
 
         GPIO.output(DC_MOTOR_PIN, GPIO.HIGH)
         manual_single_feed_button.disable()
