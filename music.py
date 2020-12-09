@@ -1,3 +1,43 @@
+#!/usr/bin/env python
+# ---------------------------------------------------
+# This is free and unencumbered software released into the public domain.
+#
+# Anyone is free to copy, modify, publish, use, compile, sell, or
+# distribute this software, either in source code form or as a compiled
+# binary, for any purpose, commercial or non-commercial, and by any
+# means.
+#
+# In jurisdictions that recognize copyright laws, the author or authors
+# of this software dedicate any and all copyright interest in the
+# software to the public domain. We make this dedication for the benefit
+# of the public at large and to the detriment of our heirs and
+# successors. We intend this dedication to be an overt act of
+# relinquishment in perpetuity of all present and future rights to this
+# software under copyright law.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+# IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+# For more information, please refer to <http://unlicense.org>
+# ---------------------------------------------------
+#
+#		Passive buzzer 			   Pi
+#			VCC ----------------- 3.3V
+#			GND ------------------ GND
+#			SIG ---------------- Pin Gpio27
+#
+#		some notes for melodies were taken from:
+#		http://www.astlessons.com/pianoforkids1.html
+#		http://www.astlessons.com/pianoforkids2.html
+#		where you can get more notes
+#
+# ---------------------------------------------------
+
 notes = {
     'B0': 31,
     'C1': 33, 'CS1': 35,
@@ -66,6 +106,433 @@ notes = {
     'C8': 4186, 'CS8': 4435,
     'D8': 4699, 'DS8': 4978
 }
+
+melody = [
+    notes['E7'], notes['E7'], 0, notes['E7'],
+    0, notes['C7'], notes['E7'], 0,
+    notes['G7'], 0, 0, 0,
+    notes['G6'], 0, 0, 0,
+
+    notes['C7'], 0, 0, notes['G6'],
+    0, 0, notes['E6'], 0,
+    0, notes['A6'], 0, notes['B6'],
+    0, notes['AS6'], notes['A6'], 0,
+
+    notes['G6'], notes['E7'], notes['G7'],
+    notes['A7'], 0, notes['F7'], notes['G7'],
+    0, notes['E7'], 0, notes['C7'],
+    notes['D7'], notes['B6'], 0, 0,
+
+    notes['C7'], 0, 0, notes['G6'],
+    0, 0, notes['E6'], 0,
+    0, notes['A6'], 0, notes['B6'],
+    0, notes['AS6'], notes['A6'], 0,
+
+    notes['G6'], notes['E7'], notes['G7'],
+    notes['A7'], 0, notes['F7'], notes['G7'],
+    0, notes['E7'], 0, notes['C7'],
+    notes['D7'], notes['B6'], 0, 0
+]
+tempo = [
+    12, 12, 12, 12,
+    12, 12, 12, 12,
+    12, 12, 12, 12,
+    12, 12, 12, 12,
+
+    12, 12, 12, 12,
+    12, 12, 12, 12,
+    12, 12, 12, 12,
+    12, 12, 12, 12,
+
+    9, 9, 9,
+    12, 12, 12, 12,
+    12, 12, 12, 12,
+    12, 12, 12, 12,
+
+    12, 12, 12, 12,
+    12, 12, 12, 12,
+    12, 12, 12, 12,
+    12, 12, 12, 12,
+
+    9, 9, 9,
+    12, 12, 12, 12,
+    12, 12, 12, 12,
+    12, 12, 12, 12,
+]
+
+underworld_melody = [
+    notes['C4'], notes['C5'], notes['A3'], notes['A4'],
+    notes['AS3'], notes['AS4'], 0,
+    0,
+    notes['C4'], notes['C5'], notes['A3'], notes['A4'],
+    notes['AS3'], notes['AS4'], 0,
+    0,
+    notes['F3'], notes['F4'], notes['D3'], notes['D4'],
+    notes['DS3'], notes['DS4'], 0,
+    0,
+    notes['F3'], notes['F4'], notes['D3'], notes['D4'],
+    notes['DS3'], notes['DS4'], 0,
+    0, notes['DS4'], notes['CS4'], notes['D4'],
+    notes['CS4'], notes['DS4'],
+    notes['DS4'], notes['GS3'],
+    notes['G3'], notes['CS4'],
+    notes['C4'], notes['FS4'], notes['F4'], notes['E3'], notes['AS4'], notes['A4'],
+    notes['GS4'], notes['DS4'], notes['B3'],
+    notes['AS3'], notes['A3'], notes['GS3'],
+    0, 0, 0
+]
+
+underworld_tempo = [
+    12, 12, 12, 12,
+    12, 12, 6,
+    3,
+    12, 12, 12, 12,
+    12, 12, 6,
+    3,
+    12, 12, 12, 12,
+    12, 12, 6,
+    3,
+    12, 12, 12, 12,
+    12, 12, 6,
+    6, 18, 18, 18,
+    6, 6,
+    6, 6,
+    6, 6,
+    18, 18, 18, 18, 18, 18,
+    10, 10, 10,
+    10, 10, 10,
+    3, 3, 3
+]
+
+adventure_time_melody = [
+    notes['D5'],
+    notes['G5'], notes['G5'], notes['G5'], notes['G5'], notes['FS5'],
+    notes['FS5'], notes['E5'], notes['D5'], notes['E5'], notes['D5'], notes['D5'],
+    notes['C5'], notes['B5'], notes['A5'], notes['G4'],
+    0, notes['C5'], notes['B5'], notes['A5'], notes['G4'], 0,
+    notes['G5'], 0, notes['G5'], notes['G5'], 0, notes['G5'],
+    notes['FS5'], 0, notes['E5'], notes['E5'], notes['D5'], notes['D5'],
+    notes['C5'], notes['C5'], notes['C5'], notes['D5'],
+    notes['D5'], notes['A5'], notes['B5'], notes['A5'], notes['G4'],
+    notes['G5']
+]
+adventure_time_tempo = [
+    24,
+    24, 12, 12, 12, 24,
+    12, 24, 24, 24, 12, 24,
+    12, 12, 12, 12,
+    24, 12, 24, 24, 12, 24,
+    24, 24, 24, 12, 24, 12,
+    24, 24, 24, 12, 12, 24,
+    8, 24, 24, 8,
+    8, 24, 12, 24, 24,
+    12
+]
+
+star_wars_melody = [
+    notes['G4'], notes['G4'], notes['G4'],
+    notes['EB4'], 0, notes['BB4'], notes['G4'],
+    notes['EB4'], 0, notes['BB4'], notes['G4'], 0,
+
+    notes['D4'], notes['D4'], notes['D4'],
+    notes['EB4'], 0, notes['BB3'], notes['FS3'],
+    notes['EB3'], 0, notes['BB3'], notes['G3'], 0,
+
+    notes['G4'], 0, notes['G3'], notes['G3'], 0,
+    notes['G4'], 0, notes['FS4'], notes['F4'],
+    notes['E4'], notes['EB4'], notes['E4'], 0,
+    notes['GS3'], notes['CS3'], 0,
+
+    notes['C3'], notes['B3'], notes['BB3'], notes['A3'], notes['BB3'], 0,
+    notes['EB3'], notes['FS3'], notes['EB3'], notes['FS3'],
+    notes['BB3'], 0, notes['G3'], notes['BB3'], notes['D4'], 0,
+
+    notes['G4'], 0, notes['G3'], notes['G3'], 0,
+    notes['G4'], 0, notes['FS4'], notes['F4'],
+    notes['E4'], notes['EB4'], notes['E4'], 0,
+    notes['GS3'], notes['CS3'], 0,
+
+    notes['C3'], notes['B3'], notes['BB3'], notes['A3'], notes['BB3'], 0,
+
+    notes['EB3'], notes['FS3'], notes['EB3'],
+    notes['BB3'], notes['G3'], notes['EB3'], 0, notes['BB3'], notes['G3'],
+]
+
+star_wars_tempo = [
+    2, 2, 2,
+    4, 8, 6, 2,
+    4, 8, 6, 2, 8,
+
+    2, 2, 2,
+    4, 8, 6, 2,
+    4, 8, 6, 2, 8,
+
+    2, 16, 4, 4, 8,
+    2, 8, 4, 6,
+    6, 4, 4, 8,
+    4, 2, 8,
+    4, 4, 6, 4, 2, 8,
+    4, 2, 4, 4,
+    2, 8, 4, 6, 2, 8,
+
+    2, 16, 4, 4, 8,
+    2, 8, 4, 6,
+    6, 4, 4, 8,
+    4, 2, 8,
+    4, 4, 6, 4, 2, 8,
+    4, 2, 2,
+    4, 2, 4, 8, 4, 2,
+]
+
+popcorn_melody = [
+
+    notes['A4'], notes['G4'], notes['A4'], notes['E4'], notes['C4'], notes['E4'], notes['A3'],
+    notes['A4'], notes['G4'], notes['A4'], notes['E4'], notes['C4'], notes['E4'], notes['A3'],
+
+    notes['A4'], notes['B4'], notes['C5'], notes['B4'], notes['C5'], notes['A4'], notes['B4'], notes['A4'], notes['B4'],
+    notes['G4'],
+    notes['A4'], notes['G4'], notes['A4'], notes['F4'], notes['A4'],
+
+    notes['A4'], notes['G4'], notes['A4'], notes['E4'], notes['C4'], notes['E4'], notes['A3'],
+    notes['A4'], notes['G4'], notes['A4'], notes['E4'], notes['C4'], notes['E4'], notes['A3'],
+
+    notes['A4'], notes['B4'], notes['C5'], notes['B4'], notes['C5'], notes['A4'], notes['B4'], notes['A4'], notes['B4'],
+    notes['G4'],
+    notes['A4'], notes['G4'], notes['A4'], notes['B4'], notes['C5'],
+
+    notes['E5'], notes['D5'], notes['E5'], notes['C5'], notes['G4'], notes['C5'], notes['E4'],
+    notes['E5'], notes['D5'], notes['E5'], notes['C5'], notes['G4'], notes['C5'], notes['E4'],
+
+    notes['E5'], notes['FS5'], notes['G5'], notes['FS5'], notes['G5'], notes['E5'], notes['FS5'], notes['E5'],
+    notes['FS5'], notes['D5'],
+    notes['E5'], notes['D5'], notes['E5'], notes['C5'], notes['E5'],
+
+    ###
+
+    notes['E5'], notes['D5'], notes['E5'], notes['C5'], notes['G4'], notes['C5'], notes['E4'],
+    notes['E5'], notes['D5'], notes['E5'], notes['C5'], notes['G4'], notes['C5'], notes['E4'],
+
+    notes['E5'], notes['FS5'], notes['G5'], notes['FS5'], notes['G5'], notes['E5'], notes['FS5'], notes['E5'],
+    notes['FS5'], notes['D5'],
+    notes['E5'], notes['D5'], notes['B4'], notes['D5'], notes['E5'],
+]
+popcorn_tempo = [
+    8, 8, 8, 8, 8, 8, 4,
+    8, 8, 8, 8, 8, 8, 4,
+
+    8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+    8, 8, 8, 8, 4,
+
+    8, 8, 8, 8, 8, 8, 4,
+    8, 8, 8, 8, 8, 8, 4,
+
+    8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+    8, 8, 8, 8, 4,
+
+    8, 8, 8, 8, 8, 8, 4,
+    8, 8, 8, 8, 8, 8, 4,
+
+    8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+    8, 8, 8, 8, 4,
+
+    8, 8, 8, 8, 8, 8, 4,
+    8, 8, 8, 8, 8, 8, 4,
+
+    8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+    8, 8, 8, 8, 4,
+]
+
+twinkle_twinkle_melody = [
+    notes['C4'], notes['C4'], notes['G4'], notes['G4'], notes['A4'], notes['A4'], notes['G4'],
+    notes['F4'], notes['F4'], notes['E4'], notes['E4'], notes['D4'], notes['D4'], notes['C4'],
+
+    notes['G4'], notes['G4'], notes['F4'], notes['F4'], notes['E4'], notes['E4'], notes['D4'],
+    notes['G4'], notes['G4'], notes['F4'], notes['F4'], notes['E4'], notes['E4'], notes['D4'],
+
+    notes['C4'], notes['C4'], notes['G4'], notes['G4'], notes['A4'], notes['A4'], notes['G4'],
+    notes['F4'], notes['F4'], notes['E4'], notes['E4'], notes['D4'], notes['D4'], notes['C4'],
+]
+
+twinkle_twinkle_tempo = [
+    4, 4, 4, 4, 4, 4, 2,
+    4, 4, 4, 4, 4, 4, 2,
+
+    4, 4, 4, 4, 4, 4, 2,
+    4, 4, 4, 4, 4, 4, 2,
+
+    4, 4, 4, 4, 4, 4, 2,
+    4, 4, 4, 4, 4, 4, 2,
+]
+
+crazy_frog_melody = [
+    notes['A4'], notes['C5'], notes['A4'], notes['A4'], notes['D5'], notes['A4'], notes['G4'],
+    notes['A4'], notes['E5'], notes['A4'], notes['A4'], notes['F5'], notes['E5'], notes['C5'],
+    notes['A4'], notes['E5'], notes['A5'], notes['A4'], notes['G4'], notes['G4'], notes['E4'], notes['B4'],
+    notes['A4'], 0,
+
+    notes['A4'], notes['C5'], notes['A4'], notes['A4'], notes['D5'], notes['A4'], notes['G4'],
+    notes['A4'], notes['E5'], notes['A4'], notes['A4'], notes['F5'], notes['E5'], notes['C5'],
+    notes['A4'], notes['E5'], notes['A5'], notes['A4'], notes['G4'], notes['G4'], notes['E4'], notes['B4'],
+    notes['A4'], 0,
+
+    notes['A3'], notes['G3'], notes['E3'], notes['D3'],
+
+    notes['A4'], notes['C5'], notes['A4'], notes['A4'], notes['D5'], notes['A4'], notes['G4'],
+    notes['A4'], notes['E5'], notes['A4'], notes['A4'], notes['F5'], notes['E5'], notes['C5'],
+    notes['A4'], notes['E5'], notes['A5'], notes['A4'], notes['G4'], notes['G4'], notes['E4'], notes['B4'],
+    notes['A4'],
+]
+
+crazy_frog_tempo = [
+    2, 4, 4, 8, 4, 4, 4,
+    2, 4, 4, 8, 4, 4, 4,
+    4, 4, 4, 8, 4, 8, 4, 4,
+    1, 4,
+
+    2, 4, 4, 8, 4, 4, 4,
+    2, 4, 4, 8, 4, 4, 4,
+    4, 4, 4, 8, 4, 8, 4, 4,
+    1, 4,
+
+    8, 4, 4, 4,
+
+    2, 4, 4, 8, 4, 4, 4,
+    2, 4, 4, 8, 4, 4, 4,
+    4, 4, 4, 8, 4, 8, 4, 4,
+    1,
+]
+
+deck_the_halls_melody = [
+    notes['G5'], notes['F5'], notes['E5'], notes['D5'],
+    notes['C5'], notes['D5'], notes['E5'], notes['C5'],
+    notes['D5'], notes['E5'], notes['F5'], notes['D5'], notes['E5'], notes['D5'],
+    notes['C5'], notes['B4'], notes['C5'], 0,
+
+    notes['G5'], notes['F5'], notes['E5'], notes['D5'],
+    notes['C5'], notes['D5'], notes['E5'], notes['C5'],
+    notes['D5'], notes['E5'], notes['F5'], notes['D5'], notes['E5'], notes['D5'],
+    notes['C5'], notes['B4'], notes['C5'], 0,
+
+    notes['D5'], notes['E5'], notes['F5'], notes['D5'],
+    notes['E5'], notes['F5'], notes['G5'], notes['D5'],
+    notes['E5'], notes['F5'], notes['G5'], notes['A5'], notes['B5'], notes['C6'],
+    notes['B5'], notes['A5'], notes['G5'], 0,
+
+    notes['G5'], notes['F5'], notes['E5'], notes['D5'],
+    notes['C5'], notes['D5'], notes['E5'], notes['C5'],
+    notes['D5'], notes['E5'], notes['F5'], notes['D5'], notes['E5'], notes['D5'],
+    notes['C5'], notes['B4'], notes['C5'], 0,
+]
+
+deck_the_halls_tempo = [
+    2, 4, 2, 2,
+    2, 2, 2, 2,
+    4, 4, 4, 4, 2, 4,
+    2, 2, 2, 2,
+
+    2, 4, 2, 2,
+    2, 2, 2, 2,
+    4, 4, 4, 4, 2, 4,
+    2, 2, 2, 2,
+
+    2, 4, 2, 2,
+    2, 4, 2, 2,
+    4, 4, 2, 4, 4, 2,
+    2, 2, 2, 2,
+
+    2, 4, 2, 2,
+    2, 2, 2, 2,
+    4, 4, 4, 4, 2, 4,
+    2, 2, 2, 2,
+]
+
+manaderna_melody = [
+    notes['E4'], notes['E4'], notes['F4'], notes['G4'],
+    notes['G4'], notes['F4'], notes['E4'], notes['D4'],
+    notes['C4'], notes['C4'], notes['D4'], notes['E4'],
+    notes['E4'], 0, notes['D4'], notes['D4'], 0,
+
+    notes['E4'], notes['E4'], notes['F4'], notes['G4'],
+    notes['G4'], notes['F4'], notes['E4'], notes['D4'],
+    notes['C4'], notes['C4'], notes['D4'], notes['E4'],
+    notes['D4'], 0, notes['C4'], notes['C4'], 0,
+
+    notes['D4'], notes['D4'], notes['E4'], notes['C4'],
+    notes['D4'], notes['E4'], notes['F4'], notes['E4'], notes['C4'],
+    notes['D4'], notes['E4'], notes['F4'], notes['E4'], notes['D4'],
+    notes['C4'], notes['D4'], notes['G3'], 0,
+
+    notes['E4'], notes['E4'], notes['F4'], notes['G4'],
+    notes['G4'], notes['F4'], notes['E4'], notes['D4'],
+    notes['C4'], notes['C4'], notes['D4'], notes['E4'],
+    notes['D4'], 0, notes['C4'], notes['C4'],
+]
+
+manaderna_tempo = [
+    2, 2, 2, 2,
+    2, 2, 2, 2,
+    2, 2, 2, 2,
+    2, 4, 4, 2, 4,
+
+    2, 2, 2, 2,
+    2, 2, 2, 2,
+    2, 2, 2, 2,
+    2, 4, 4, 2, 4,
+
+    2, 2, 2, 2,
+    2, 4, 4, 2, 2,
+    2, 4, 4, 2, 2,
+    2, 2, 1, 4,
+
+    2, 2, 2, 2,
+    2, 2, 2, 2,
+    2, 2, 2, 2,
+    2, 4, 4, 2,
+]
+
+bonnagard_melody = [
+    notes['C5'], notes['C5'], notes['C5'], notes['G4'],
+    notes['A4'], notes['A4'], notes['G4'],
+    notes['E5'], notes['E5'], notes['D5'], notes['D5'],
+    notes['C5'], 0, notes['G4'],
+
+    notes['C5'], notes['C5'], notes['C5'], notes['G4'],
+    notes['A4'], notes['A4'], notes['G4'],
+    notes['E5'], notes['E5'], notes['D5'], notes['D5'],
+    notes['C5'], 0, notes['G4'], notes['G4'],
+
+    notes['C5'], notes['C5'], notes['C5'], notes['G4'], notes['G4'],
+    notes['C5'], notes['C5'], notes['G4'],
+    notes['C5'], notes['C5'], notes['C5'], notes['C5'], notes['C5'], notes['C5'],
+    notes['C5'], notes['C5'], notes['C5'], notes['C5'], notes['C5'], notes['C5'], 0,
+
+    notes['C5'], notes['C5'], notes['C5'], notes['G4'],
+    notes['A4'], notes['A4'], notes['G4'],
+    notes['E5'], notes['E5'], notes['D5'], notes['D5'],
+    notes['C5'], 0,
+]
+
+bonnagard_tempo = [
+    2, 2, 2, 2,
+    2, 2, 1,
+    2, 2, 2, 2,
+    1, 2, 2,
+
+    2, 2, 2, 2,
+    2, 2, 1,
+    2, 2, 2, 2,
+    1, 2, 4, 4,
+
+    2, 2, 2, 4, 4,
+    2, 2, 1,
+    4, 4, 2, 4, 4, 2,
+    4, 4, 4, 4, 2, 2, 4,
+
+    2, 2, 2, 2,
+    2, 2, 1,
+    2, 2, 2, 2,
+    1, 1,
+]
 
 final_countdown_melody = [
     notes['A3'], notes['E5'], notes['D5'], notes['E5'], notes['A4'],
