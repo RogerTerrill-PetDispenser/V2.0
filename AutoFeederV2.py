@@ -198,7 +198,7 @@ def buzz(frequency, length):  # create the function "buzz" and feed it the pitch
 
 app = App(title="Binky Food Machine V2")
 
-play(music.star_wars_melody, music.star_wars_tempo, 0.50, 1.000)
+play(music.crazy_frog_melody, music.crazy_frog_tempo,0.30,0.900)
 
 # Title box
 title_box_container = Box(app, width="fill", align="top", border=True)

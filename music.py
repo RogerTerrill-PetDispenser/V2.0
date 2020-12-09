@@ -370,17 +370,7 @@ crazy_frog_melody = [
     notes['A4'], notes['E5'], notes['A5'], notes['A4'], notes['G4'], notes['G4'], notes['E4'], notes['B4'],
     notes['A4'], 0,
 
-    notes['A4'], notes['C5'], notes['A4'], notes['A4'], notes['D5'], notes['A4'], notes['G4'],
-    notes['A4'], notes['E5'], notes['A4'], notes['A4'], notes['F5'], notes['E5'], notes['C5'],
-    notes['A4'], notes['E5'], notes['A5'], notes['A4'], notes['G4'], notes['G4'], notes['E4'], notes['B4'],
-    notes['A4'], 0,
-
-    notes['A3'], notes['G3'], notes['E3'], notes['D3'],
-
-    notes['A4'], notes['C5'], notes['A4'], notes['A4'], notes['D5'], notes['A4'], notes['G4'],
-    notes['A4'], notes['E5'], notes['A4'], notes['A4'], notes['F5'], notes['E5'], notes['C5'],
-    notes['A4'], notes['E5'], notes['A5'], notes['A4'], notes['G4'], notes['G4'], notes['E4'], notes['B4'],
-    notes['A4'],
+    
 ]
 
 crazy_frog_tempo = [
@@ -389,17 +379,7 @@ crazy_frog_tempo = [
     4, 4, 4, 8, 4, 8, 4, 4,
     1, 4,
 
-    2, 4, 4, 8, 4, 4, 4,
-    2, 4, 4, 8, 4, 4, 4,
-    4, 4, 4, 8, 4, 8, 4, 4,
-    1, 4,
-
-    8, 4, 4, 4,
-
-    2, 4, 4, 8, 4, 4, 4,
-    2, 4, 4, 8, 4, 4, 4,
-    4, 4, 4, 8, 4, 8, 4, 4,
-    1,
+    
 ]
 
 deck_the_halls_melody = [
