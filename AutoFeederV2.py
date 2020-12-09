@@ -99,7 +99,8 @@ def run_threaded(job_func):
 
 
 def single_feed():
-    play(music.crazy_frog_melody, music.crazy_frog_tempo,0.30,0.900)
+    play(music.crazy_frog_melody, music.crazy_frog_tempo, 0.30, 0.900)
+
     if enabled:
         last_fed_time.value = current_time.strftime("%I:%M:%S %p")
 
