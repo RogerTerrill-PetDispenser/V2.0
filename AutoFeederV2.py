@@ -103,6 +103,7 @@ def run_threaded(job_func):
 
 
 def single_feed():
+    play(music.crazy_frog_melody, music.crazy_frog_tempo,0.30,0.900)
     if enabled:
         feed_time = datetime.now()
         last_fed_time.value = current_time.strftime("%I:%M:%S %p")
@@ -197,8 +198,6 @@ def buzz(frequency, length):  # create the function "buzz" and feed it the pitch
 
 
 app = App(title="Binky Food Machine V2")
-
-play(music.crazy_frog_melody, music.crazy_frog_tempo,0.30,0.900)
 
 # Title box
 title_box_container = Box(app, width="fill", align="top", border=True)
