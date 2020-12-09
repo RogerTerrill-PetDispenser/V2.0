@@ -5,12 +5,13 @@ import time
 import schedule
 import music
 from datetime import datetime
-from guizero import App, Text, PushButton, Window, Box
+from guizero import App, Text, PushButton, Box
 
 # Raspberry Pi 3 Pin Settings
-BUZZER_PIN = 21
 DC_MOTOR_PIN = 13
 PIR_PIN = 15
+BUZZER_PIN = 21
+
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)  # We are accessing GPIOs according to their physical location
 
@@ -54,7 +55,7 @@ def pause():
     enabled = not enabled
     pause_feed_button.text = "Binky Food Machine Is Paused" if not enabled else "Binky Food Machine Is Enabled"
     pause_feed_button.bg = RED if not enabled else GREEN
-    if (not enabled):
+    if not enabled:
         manual_single_feed_button.disable()
         manual_feed_toggle_button.disable()
     else:
@@ -83,14 +84,13 @@ def pause_after_manual_feed():
     print("Enabled" if enabled else "Disabled")
 
 
-def SetDisplay(DisplayOn):
-    cmd = ""
-    if DisplayOn == True:
+def set_display(display_status):
+    if display_status:
         cmd = "sudo xset dpms force on"
     else:
         cmd = "sudo xset dpms force off"
     if cmd is not "":
-        print("Display-Status: " + str(DisplayOn))
+        print("Display-Status: " + str(display_status))
         print(cmd)
         os.system(cmd)
         # wait 10 seconds, cause of the detection time of the PIR_PIN
@@ -165,12 +165,12 @@ def motion_detection():
             time_since_motion_detected = time.time()
             if not display_on:
                 display_on = True
-                SetDisplay(True)
+                set_display(True)
         if display_on:
             if time.time() - time_since_motion_detected > DISPLAY_ON_TIME:
                 # time is over, screen off
                 display_on = False
-                SetDisplay(False)
+                set_display(False)
 
 
 def play(melody, tempo, pause, pace=0.800):
