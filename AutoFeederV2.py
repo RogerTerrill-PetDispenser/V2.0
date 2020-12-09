@@ -7,40 +7,37 @@ import music
 from datetime import datetime
 from guizero import App, Text, PushButton, Box
 
-# Raspberry Pi 3 Pin Settings
+# Raspberry Pi Pin Assignments
 DC_MOTOR_PIN = 13
 PIR_PIN = 15
 BUZZER_PIN = 21
 
+# GPIO Setup
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)  # We are accessing GPIOs according to their physical location
-
 GPIO.setup(PIR_PIN, GPIO.IN)
-
 GPIO.setup(BUZZER_PIN, GPIO.IN)
 GPIO.setup(BUZZER_PIN, GPIO.OUT)
+GPIO.setup(DC_MOTOR_PIN, GPIO.OUT)
+GPIO.output(DC_MOTOR_PIN, GPIO.LOW)
 
-GPIO.setup(DC_MOTOR_PIN, GPIO.OUT)  # We have set our LED pin mode to output
-GPIO.output(DC_MOTOR_PIN, GPIO.LOW)  # When it will start then LED will be OFF
-
-# Raspberry Pi 3 Pin Settings
-enabled = True
-led_text = "OFF"
+# Constants, Times in Seconds
 FOOD_DELAY = 6.80
 MANUAL_FEED_PAUSE = 3600
+DISPLAY_ON_TIME = 60
 BUTTON_TEXT_SIZE = 60
-DISPLAY_ON_TIME = 5  # wait time in seconds
-current_time = ""
-display_on = True
-time_since_motion_detected = time.time()
 
+# Color Constants
 GREEN = "green"
 RED = "red"
 WHITE = "white"
 BLUE = "#06BEE1"
 
-
-# Function for Buttons started here
+# Global Variables
+enabled = True
+current_time = ""
+display_on = True
+time_since_motion_detected = time.time()
 
 
 def manual_feed_toggle():
@@ -66,10 +63,10 @@ def pause():
 
 def pause_after_manual_feed():
     global enabled
+
     enabled = False
     pause_feed_button.text = "Binky Food Machine Is Paused"
     pause_feed_button.bg = RED
-
     manual_single_feed_button.disable()
     manual_feed_toggle_button.disable()
 
@@ -93,8 +90,7 @@ def set_display(display_status):
         print("Display-Status: " + str(display_status))
         print(cmd)
         os.system(cmd)
-        # wait 10 seconds, cause of the detection time of the PIR_PIN
-        time.sleep(1)
+        time.sleep(1)  # Checks every second for motion
 
 
 def run_threaded(job_func):
@@ -104,7 +100,6 @@ def run_threaded(job_func):
 
 def single_feed():
     if enabled:
-        feed_time = datetime.now()
         last_fed_time.value = current_time.strftime("%I:%M:%S %p")
 
         GPIO.output(DC_MOTOR_PIN, GPIO.HIGH)
@@ -155,11 +150,6 @@ def motion_detection():
     i = 0
     while True:
         time.sleep(0.1)
-        i = i + 1
-        if i == 10:
-            i = 0
-            if display_on:
-                print("Time-Out: " + str(DISPLAY_ON_TIME - round(time.time() - time_since_motion_detected)))
         if GPIO.input(PIR_PIN) == 1:
             time_since_motion_detected = time.time()
             if not display_on:
@@ -172,12 +162,12 @@ def motion_detection():
                 set_display(False)
 
 
-def play(melody, tempo, pause, pace=0.800):
+def play(melody, tempo, pause_tempo, pace=0.800):
     for i in range(0, len(melody)):  # Play song
         note_duration = pace / tempo[i]
         buzz(melody[i], note_duration)  # Change the frequency along the song note
 
-        pause_between_notes = note_duration * pause
+        pause_between_notes = note_duration * pause_tempo
         time.sleep(pause_between_notes)
 
 
@@ -186,7 +176,7 @@ def buzz(frequency, length):  # create the function "buzz" and feed it the pitch
         time.sleep(length)
         return
     period = 1.0 / frequency  # in physics, the period (sec/cyc) is the inverse of the frequency (cyc/sec)
-    delay_value = period / 2  # calcuate the time for half of the wave
+    delay_value = period / 2  # calculate the time for half of the wave
     num_cycles = int(length * frequency)  # the number of waves to produce is the duration times the frequency
 
     for i in range(num_cycles):  # start a loop from 0 to the variable "cycles" calculated above
@@ -198,8 +188,6 @@ def buzz(frequency, length):  # create the function "buzz" and feed it the pitch
 
 app = App(title="Binky Food Machine V2")
 
-play(music.crazy_frog_melody, music.crazy_frog_tempo,0.30,0.900)
-
 # Title box
 title_box_container = Box(app, width="fill", align="top", border=True)
 title_box_left = Box(title_box_container, width="fill", align="left")
@@ -210,13 +198,11 @@ last_fed_time = Text(title_box_right, size=24, align="bottom", height="fill", wi
 
 # Button box
 buttons_box = Box(app, width="fill", height="fill", align="top", border=True)
-
 manual_feed_toggle_button = PushButton(buttons_box, align="left", text="Toggle Feed", width="fill", height="fill",
                                        command=manual_feed_toggle)
 manual_feed_toggle_button.bg = BLUE
 manual_feed_toggle_button.text_color = WHITE
 manual_feed_toggle_button.text_size = BUTTON_TEXT_SIZE
-
 manual_single_feed_button = PushButton(buttons_box, align="right", text="Manual Feed", width="fill", height="fill",
                                        command=manual_single_feed)
 manual_single_feed_button.bg = BLUE
