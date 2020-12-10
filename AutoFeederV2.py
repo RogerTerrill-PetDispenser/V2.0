@@ -22,9 +22,9 @@ GPIO.setup(DC_MOTOR_PIN, GPIO.OUT)
 GPIO.output(DC_MOTOR_PIN, GPIO.LOW)
 
 # Constants, Times in Seconds
-FOOD_DELAY = 6.80
+FOOD_DELAY = 6.50
 MANUAL_FEED_PAUSE = 3600
-DISPLAY_ON_TIME = 600
+DISPLAY_ON_TIME = 60
 BUTTON_TEXT_SIZE = 60
 
 # Color Constants
@@ -99,8 +99,6 @@ def run_threaded(job_func):
 
 
 def single_feed():
-    
-
     if enabled:
         last_fed_time.value = current_time.strftime("%I:%M %p")
 
@@ -153,10 +151,10 @@ def display_time():
 def motion_detection():
     global time_since_motion_detected, display_on
     display_on = True
-    i = 0
     while True:
         time.sleep(0.1)
         if GPIO.input(PIR_PIN) == 1:
+            print("Motion detected at " + datetime.now().strftime("%I:%M:%S %p"))
             time_since_motion_detected = time.time()
             if not display_on:
                 display_on = True
