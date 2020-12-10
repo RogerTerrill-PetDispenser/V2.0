@@ -87,7 +87,7 @@ def set_display(display_status):
     else:
         cmd = "sudo xset dpms force off"
     if cmd is not "":
-        print("Display-Status: " + str(display_status))
+        print("Display-Status: " + str(display_status) + ' at ' + datetime.now().strftime("%I:%M:%S %p"))
         print(cmd)
         os.system(cmd)
         time.sleep(1)  # Checks every second for motion
@@ -99,7 +99,7 @@ def run_threaded(job_func):
 
 
 def single_feed():
-    play(music.crazy_frog_melody, music.crazy_frog_tempo, 0.30, 0.900)
+    
 
     if enabled:
         last_fed_time.value = current_time.strftime("%I:%M %p")
@@ -127,10 +127,14 @@ def manual_single_feed():
     run_threaded(single_feed)
     run_threaded(pause_after_manual_feed)
 
+def automated_feed():
+    play(music.crazy_frog_melody, music.crazy_frog_tempo, 0.30, 0.900)
+    single_feed()
+
 
 def run_feeding_schedule():
-    schedule.every().day.at("06:00").do(single_feed)
-    schedule.every().day.at("18:00").do(single_feed)
+    schedule.every().day.at("06:00").do(automated_feed)
+    schedule.every().day.at("18:00").do(automated_feed)
     while True:
         schedule.run_pending()
         time.sleep(1)
