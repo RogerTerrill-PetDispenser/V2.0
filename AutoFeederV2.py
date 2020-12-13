@@ -81,18 +81,6 @@ def pause_after_manual_feed():
     print("Enabled" if enabled else "Disabled")
 
 
-def set_display(display_status):
-    if display_status:
-        cmd = "sudo xset dpms force on"
-    else:
-        cmd = "sudo xset dpms force off"
-    if cmd is not "":
-        print("Display-Status: " + str(display_status) + ' at ' + datetime.now().strftime("%I:%M:%S %p"))
-        print(cmd)
-        os.system(cmd)
-        time.sleep(1)  # Checks every second for motion
-
-
 def run_threaded(job_func):
     job_thread = threading.Thread(target=job_func)
     job_thread.start()
@@ -148,13 +136,24 @@ def display_time():
         header_text.value = date + "\n" + now
 
 
+def set_display(display_status):
+    if display_status:
+        cmd = "sudo xset dpms force on"
+    else:
+        cmd = "sudo xset dpms force off"
+    if cmd is not "":
+        print("Display-Status: " + str(display_status) + ' at ' + datetime.now().strftime("%I:%M:%S %p"))
+        print(cmd)
+        os.system(cmd)
+        time.sleep(1)  # Checks every second for motion
+        
+        
 def motion_detection():
     global time_since_motion_detected, display_on
     display_on = True
     while True:
         time.sleep(0.1)
         if GPIO.input(PIR_PIN) == 1:
-            print("Motion detected at " + datetime.now().strftime("%I:%M:%S %p"))
             time_since_motion_detected = time.time()
             if not display_on:
                 display_on = True
