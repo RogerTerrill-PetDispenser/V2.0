@@ -22,7 +22,7 @@ GPIO.setup(DC_MOTOR_PIN, GPIO.OUT)
 GPIO.output(DC_MOTOR_PIN, GPIO.LOW)
 
 # Constants, Times in Seconds
-FOOD_DELAY = 6.60
+FOOD_DELAY = 6.65
 MANUAL_FEED_PAUSE = 3600
 DISPLAY_ON_TIME = 60
 BUTTON_TEXT_SIZE = 60
@@ -201,11 +201,12 @@ last_fed_time = Text(title_box_right, size=24, align="bottom", height="fill", wi
 
 # Button box
 buttons_box = Box(app, width="fill", height="fill", align="top", border=True)
-manual_feed_toggle_button = PushButton(buttons_box, align="left", text="Toggle Feed", width="fill", height="fill",
-                                       command=manual_feed_toggle)
+manual_feed_toggle_button = PushButton(buttons_box, align="left", text="Toggle Feed", width="fill", height="fill")
 manual_feed_toggle_button.bg = BLUE
 manual_feed_toggle_button.text_color = WHITE
 manual_feed_toggle_button.text_size = BUTTON_TEXT_SIZE
+manual_feed_toggle_button.when_left_button_pressed = manual_feed_toggle
+manual_feed_toggle_button.when_left_button_released = manual_feed_toggle
 manual_single_feed_button = PushButton(buttons_box, align="right", text="Manual Feed", width="fill", height="fill",
                                        command=manual_single_feed)
 manual_single_feed_button.bg = BLUE
