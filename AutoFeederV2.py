@@ -119,7 +119,7 @@ def automated_feed():
 
 
 def run_feeding_schedule():
-    schedule.every().day.at("06:00").do(automated_feed)
+    schedule.every().day.at("06:15").do(automated_feed)
     schedule.every().day.at("18:00").do(automated_feed)
     while True:
         schedule.run_pending()
@@ -155,6 +155,7 @@ def motion_detection():
         time.sleep(0.1)
         if GPIO.input(PIR_PIN) == 1:
             time_since_motion_detected = time.time()
+            # print("motion detected " + datetime.now().strftime("%I:%M:%S %p"))
             if not display_on:
                 display_on = True
                 set_display(True)
